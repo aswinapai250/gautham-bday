@@ -1,26 +1,137 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
+@theme {
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-playfair);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root, .theme-blush {
+  --primary: #F7D6E0;
+  --secondary: #E6D5FF;
+  --accent: #BEE3F8;
+  --background: #FFFDFB;
+  --foreground: #2D3748;
+}
+
+.theme-lavender {
+  --primary: #E6D5FF;
+  --secondary: #F7D6E0;
+  --accent: #D6BCFA;
+  --background: #FAF5FF;
+  --foreground: #2D3748;
+}
+
+.theme-midnight {
+  --primary: #E2E8F0;
+  --secondary: #3B82F6;
+  --accent: #F59E0B;
+  --background: #0F172A;
+  --foreground: #F8FAFC;
+}
+
+.theme-ocean {
+  --primary: #BEE3F8;
+  --secondary: #B2F5EA;
+  --accent: #FEEBC8;
+  --background: #F0F9FF;
+  --foreground: #1E3A8A;
+}
+
+.theme-vintage {
+  --primary: #C6F6D5;
+  --secondary: #FEFCBF;
+  --accent: #FED7D7;
+  --background: #FCF8F2;
+  --foreground: #2F855A;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+  transition: background-color 0.5s ease, color 0.5s ease;
 }
+
+/* Touch scrolling momentum for iOS */
+.overflow-y-auto, .overflow-y-scroll {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Scrollbar utilities */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* 3D Envelope folds and paper styling */
+.perspective-1000 {
+  perspective: 1000px;
+}
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+/* Glassmorphism helpers */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.theme-midnight .glass-panel {
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Paper letter style lines */
+.letter-paper-lines {
+  background-image: repeating-linear-gradient(transparent, transparent 31px, rgba(232, 223, 211, 0.6) 31px, rgba(232, 223, 211, 0.6) 32px);
+  line-height: 32px;
+}
+
+/* Custom animations */
+@keyframes floatUp {
+  0% {
+    transform: translateY(100vh) scale(0.6) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.7;
+  }
+  90% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(-20vh) scale(1.1) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.animate-float-particle {
+  animation: floatUp 12s linear infinite;
+}
+
+/* Polaroid tape style */
+.polaroid-tape {
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(1px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transform: rotate(-3deg);
+}
+
