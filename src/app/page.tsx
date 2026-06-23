@@ -13,7 +13,18 @@ import YouTube, { YouTubeEvent, YouTubePlayer } from "react-youtube";
 /*  DATA                                                               */
 /* ================================================================== */
 
-const FLOWERS = [
+interface FlowerItem {
+  id: number;
+  emoji: string;
+  x: number;
+  y: number;
+  color: string;
+  title: string;
+  message?: string;
+  image?: string;
+}
+
+const FLOWERS: FlowerItem[] = [
   { 
     id: 1, 
     emoji: "🌸", 
@@ -21,8 +32,7 @@ const FLOWERS = [
     y: 28, 
     color: "bg-rose-300",   
     title: "A photo of you I find cute ",       
-    message: "I will always stand by you, no matter what journey life takes us on. You are my constant source of strength.",
-    image: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=600&auto=format&fit=crop"
+    image: "/WhatsApp%20Image%202026-06-23%20at%206.24.29%20PM.jpeg"
   },
   { 
     id: 2, 
@@ -31,8 +41,8 @@ const FLOWERS = [
     y: 20, 
     color: "bg-purple-300", 
     title: "A photo of you I find sexy",   
-    message: "You make me wet",
-    image: "https://images.unsplash.com/photo-1516979187457-637abb4f9353?q=80&w=600&auto=format&fit=crop"
+ 
+    image: "/WhatsApp Image 2026-06-23 at 6.22.50 PM.jpeg"
   },
   { 
     id: 3, 
@@ -41,8 +51,8 @@ const FLOWERS = [
     y: 44, 
     color: "bg-amber-300",  
     title: "A photo of you I find pretty",      
-    message: "The moment I saw you, my heart whispered: 'That's the one.' It was the best day of my life.",
-    image: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?q=80&w=600&auto=format&fit=crop"
+
+    image: "/WhatsApp Image 2026-06-23 at 6.23.29 PM.jpeg"
   },
   { 
     id: 4, 
@@ -51,7 +61,7 @@ const FLOWERS = [
     y: 52, 
     color: "bg-blue-300",   
     title: "A photo of you I find funny",   
-    image: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?q=80&w=600&auto=format&fit=crop"
+    image: "/WhatsApp%20Image%202026-06-23%20at%205.58.45%20PM.jpeg"
   },
   { 
     id: 5, 
@@ -60,17 +70,23 @@ const FLOWERS = [
     y: 62, 
     color: "bg-pink-300",   
     title: "My fav photo of you",         
-    image: "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=600&auto=format&fit=crop"
+    image: "/WhatsApp%20Image%202026-06-23%20at%205.54.34%20PM.jpeg"
   },
 ];
 
-const LETTER_TEXT = `My dearest,
+const LETTER_TEXT = `HAPPY BIRTHDAY BABYYYY
 
-I wanted to create something special for you. This bouquet holds memories, inside jokes, and little notes to remind you how much you mean to me.
+i hope ur having a pretty start on ur day ( i hope im ur first wish☹️🤘🏻)
+ 
+ik sometimes i don't make u feel like i appreciate the things u to do me BUT U HAVE NO IDEA HOW MUCH ALL THAT MEANS TO ME😞😞😞😞😞. u are the best bf in the whole world .
 
-Take your time exploring. I hope it makes you smile.
+You're the first person i come to whenever the world gets mean to me.☹️☹️
 
-With all my love ❤️`;
+and even tho we argue quite a lot these days i js want u to know that im not gonna leave u unless u cheat on me ( don't u ever do that bitch u don't belong to no other bitch🤨🤨)
+
+i love u the most in the whole world and i really really wish i could be w u for the rest of my life.
+
+UMMA BABY NINK NJN MATHRE ILU 😘😘 (alle☹️)`;
 
 /* ================================================================== */
 /*  DATA DEFINITIONS & PLACEHOLDER COMPONENTS                         */
@@ -183,19 +199,20 @@ function FlowerModal({ flower, onClose }: { flower: typeof FLOWERS[0] | null; on
         </div>
 
         {flower.image && (
-          <div className="my-4 overflow-hidden rounded-2xl border border-pink-100/50 shadow-inner aspect-video relative group">
+          <div className="my-4 overflow-hidden rounded-2xl border border-pink-100/50 bg-gray-50/50 flex items-center justify-center relative group max-h-[320px] shadow-sm">
             <img 
               src={flower.image} 
               alt={flower.title} 
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" 
+              className="max-h-[320px] w-full object-contain group-hover:scale-[1.02] transition-transform duration-500 ease-out" 
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
           </div>
         )}
 
-        <div className="p-4 bg-pink-50/50 rounded-2xl border border-pink-100/80">
-          <p className="text-base text-gray-700 leading-relaxed whitespace-pre-wrap">{flower.message}</p>
-        </div>
+        {flower.message && (
+          <div className="p-4 bg-pink-50/50 rounded-2xl border border-pink-100/80">
+            <p className="text-base text-gray-700 leading-relaxed whitespace-pre-wrap">{flower.message}</p>
+          </div>
+        )}
       </motion.div>
     </motion.div>
   );
@@ -795,13 +812,13 @@ function CreateBouquetContent() {
               </motion.div>
 
               <div className="flex flex-col gap-5 w-full max-w-2xl">
-                {["Voice Note 1", "Voice Note 2"].map((label, i) => (
+                {["Voice Note"].map((label, i) => (
                   <motion.div
                     key={i}
-                    initial={{ opacity: 0, x: i % 2 === 0 ? -20 : 20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ delay: i * 0.15 }}
+                    transition={{ delay: 0.15 }}
                   >
                     <AudioPlaceholder
                       label={label}
@@ -861,7 +878,7 @@ function CreateBouquetContent() {
                       I Love You!
                     </motion.h2>
                     <p className="text-lg md:text-xl text-gray-600 leading-relaxed mb-8">
-                      Thank you for being the most amazing part of my life. I hope this little digital bouquet brightened your day.
+                      Thank you for being the most amazing part of my life. I hope this little something made you feel better ab ur day. umma to my fav person in the whole world.
                     </p>
                     <div className="flex justify-center gap-3 text-4xl">
                       {["💐", "💐", "💐"].map((e, i) => (

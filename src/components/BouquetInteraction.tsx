@@ -128,11 +128,11 @@ export default function BouquetInteraction() {
 
               {/* Responsive Image attachment */}
               {selectedFlower.image && (
-                <div className="rounded-2xl overflow-hidden shadow bg-black/5 aspect-[4/3] relative flex-shrink-0">
+                <div className="rounded-2xl overflow-hidden shadow bg-black/5 flex items-center justify-center relative flex-shrink-0 max-h-[300px]">
                   <img 
                     src={selectedFlower.image} 
                     alt={selectedFlower.title} 
-                    className="w-full h-full object-cover"
+                    className="max-h-[300px] w-full object-contain"
                   />
                 </div>
               )}
@@ -149,11 +149,13 @@ export default function BouquetInteraction() {
               )}
               
               {/* Scrollable Message Box */}
-              <div className="p-4 bg-white/60 border border-primary/10 rounded-2xl">
-                <p className="font-sans text-sm text-foreground/80 leading-relaxed whitespace-pre-wrap">
-                  {selectedFlower.message || selectedFlower.content}
-                </p>
-              </div>
+              {(selectedFlower.message || selectedFlower.content) && (
+                <div className="p-4 bg-white/60 border border-primary/10 rounded-2xl">
+                  <p className="font-sans text-sm text-foreground/80 leading-relaxed whitespace-pre-wrap">
+                    {selectedFlower.message || selectedFlower.content}
+                  </p>
+                </div>
+              )}
 
               {/* Close Button */}
               <button

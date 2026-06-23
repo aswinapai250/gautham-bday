@@ -296,15 +296,15 @@ export function generateStandaloneHTML(data: BouquetData): string {
         <h3 id="modal-flower-title" class="font-serif text-2xl font-bold text-foreground text-center mb-4">Flower Surprise</h3>
       </div>
       
-      <div id="modal-flower-image-container" class="mb-4 rounded-2xl overflow-hidden shadow-md hidden aspect-[4/3] bg-black/5">
-        <img id="modal-flower-image" src="" alt="" class="w-full h-full object-cover">
+      <div id="modal-flower-image-container" class="mb-4 rounded-2xl overflow-hidden shadow-md hidden bg-black/5 flex items-center justify-center max-h-[300px]">
+        <img id="modal-flower-image" src="" alt="" class="max-h-[300px] w-full object-contain">
       </div>
       
       <div id="modal-flower-video-container" class="mb-4 rounded-2xl overflow-hidden shadow-md hidden aspect-video bg-black">
         <video id="modal-flower-video" src="" controls class="w-full h-full object-contain"></video>
       </div>
 
-      <div class="p-4 bg-primary/5 rounded-2xl border border-primary/10">
+      <div id="modal-flower-message-container" class="p-4 bg-primary/5 rounded-2xl border border-primary/10 hidden">
         <p id="modal-flower-message" class="text-base text-foreground/80 leading-relaxed whitespace-pre-wrap"></p>
       </div>
     </div>
@@ -483,7 +483,15 @@ export function generateStandaloneHTML(data: BouquetData): string {
       function openFlowerModal(flower) {
         document.getElementById("modal-flower-emoji").innerText = flower.emoji || "🌸";
         document.getElementById("modal-flower-title").innerText = flower.title || "Surprise!";
-        document.getElementById("modal-flower-message").innerText = flower.message || flower.content || "";
+        
+        const msg = flower.message || flower.content || "";
+        const msgCont = document.getElementById("modal-flower-message-container");
+        document.getElementById("modal-flower-message").innerText = msg;
+        if (msg) {
+          msgCont.classList.remove("hidden");
+        } else {
+          msgCont.classList.add("hidden");
+        }
         
         // Image
         const imgCont = document.getElementById("modal-flower-image-container");
