@@ -78,7 +78,7 @@ const LETTER_TEXT = `HAPPY BIRTHDAY BABYYYY
 
 i hope ur having a pretty start on ur day ( i hope im ur first wish☹️🤘🏻)
  
-ik sometimes i don't make u feel like i appreciate the things u to do me BUT U HAVE NO IDEA HOW MUCH ALL THAT MEANS TO ME😞😞😞😞😞. u are the best bf in the whole world .
+ik sometimes i don't make u feel like i appreciate the things u do for me BUT U HAVE NO IDEA HOW MUCH ALL THAT MEANS TO ME😞😞😞😞😞. u are the best bf in the whole world .
 
 You're the first person i come to whenever the world gets mean to me.☹️☹️
 
@@ -93,6 +93,7 @@ UMMA BABY NINK NJN MATHRE ILU 😘😘 (alle☹️)`;
 /* ================================================================== */
 
 const PHOTOS = [
+  { url: "/WhatsApp%20Image%202026-06-25%20at%2012.09.21%20PM.jpeg", caption: "when it all started ☹️" },
   { url: "/photo1.jpeg", caption: "Our first maryathak illa photo 😛" },
   { url: "/photo2.jpeg", caption: "My fav photo of us 🥹" },
   { url: "/photo3jpeg.jpeg", caption: "The first time we drank tg🙂‍↔️" },
@@ -246,7 +247,7 @@ function PhotoLightbox({ index, onClose }: { index: number | null; onClose: () =
         />
         <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-6 pt-12 text-center">
           <p className="text-white text-base font-serif italic mb-1">"{photo.caption}"</p>
-          <p className="text-white/60 text-xs tracking-wider uppercase">Photo {index + 1} of 4</p>
+          <p className="text-white/60 text-xs tracking-wider uppercase">Photo {index + 1} of {PHOTOS.length}</p>
         </div>
       </motion.div>
     </motion.div>
@@ -290,7 +291,7 @@ function VideoLightbox({ open, onClose }: { open: boolean; onClose: () => void }
 /* ================================================================== */
 
 class SafeYouTube extends React.Component<
-  { videoId: string; onReady: (event: YouTubeEvent) => void; opts: any },
+  { videoId: string; onReady: (event: YouTubeEvent) => void; onDestroy?: () => void; opts: any },
   { hasError: boolean }
 > {
   constructor(props: any) {
@@ -304,6 +305,12 @@ class SafeYouTube extends React.Component<
 
   componentDidCatch(error: any, errorInfo: any) {
     console.error("YouTube component crashed:", error, errorInfo);
+  }
+
+  componentWillUnmount() {
+    if (this.props.onDestroy) {
+      this.props.onDestroy();
+    }
   }
 
   render() {
@@ -328,10 +335,14 @@ function BackgroundMusic({ isPlaying, onTogglePlay }: { isPlaying: boolean; onTo
     try {
       setPlayer(event.target);
       setIsReady(true);
-      if (isPlaying) {
-        event.target.playVideo();
-      } else {
-        event.target.pauseVideo();
+      
+      const iframe = typeof event.target.getIframe === "function" ? event.target.getIframe() : null;
+      if (iframe && document.body.contains(iframe)) {
+        if (isPlaying) {
+          event.target.playVideo();
+        } else {
+          event.target.pauseVideo();
+        }
       }
     } catch (err) {
       console.error("Error inside YouTube onReady handler:", err);
@@ -341,6 +352,12 @@ function BackgroundMusic({ isPlaying, onTogglePlay }: { isPlaying: boolean; onTo
   useEffect(() => {
     if (!player) return;
     try {
+      // Ensure the iframe exists and is attached to the DOM before calling methods
+      const iframe = typeof player.getIframe === "function" ? player.getIframe() : null;
+      if (!iframe || !document.body.contains(iframe)) {
+        return;
+      }
+
       if (isPlaying) {
         player.playVideo();
       } else {
@@ -357,6 +374,10 @@ function BackgroundMusic({ isPlaying, onTogglePlay }: { isPlaying: boolean; onTo
         <SafeYouTube
           videoId="pKFd12id5oQ"
           onReady={onReady}
+          onDestroy={() => {
+            setPlayer(null);
+            setIsReady(false);
+          }}
           opts={{
             playerVars: {
               autoplay: isPlaying ? 1 : 0,
@@ -450,29 +471,43 @@ function CreateBouquetContent() {
   const [musicPlaying, setMusicPlaying] = useState(true);
   const shouldPlayMusic = musicPlaying && !lightboxVideo && audioPlaying === null;
   const [audioProgress, setAudioProgress] = useState<Record<number, number>>({});
-  const audioIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Simulate audio playback progress
+  // Play real audio file and update playback progress
   const toggleAudio = (index: number) => {
     if (audioPlaying === index) {
-      // Pause
-      if (audioIntervalRef.current) clearInterval(audioIntervalRef.current);
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
       setAudioPlaying(null);
     } else {
-      // Play
-      if (audioIntervalRef.current) clearInterval(audioIntervalRef.current);
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+      
+      const audioUrl = "/WhatsApp%20Audio%202026-06-25%20at%2012.03.27%20AM.ogg";
+      const audio = new Audio(audioUrl);
+      audioRef.current = audio;
+
+      audio.addEventListener("timeupdate", () => {
+        setAudioProgress((prev) => ({
+          ...prev,
+          [index]: audio.currentTime / (audio.duration || 1),
+        }));
+      });
+
+      audio.addEventListener("ended", () => {
+        setAudioPlaying(null);
+        setAudioProgress((prev) => ({
+          ...prev,
+          [index]: 0,
+        }));
+      });
+
       setAudioPlaying(index);
-      audioIntervalRef.current = setInterval(() => {
-        setAudioProgress((prev) => {
-          const current = prev[index] || 0;
-          if (current >= 1) {
-            if (audioIntervalRef.current) clearInterval(audioIntervalRef.current);
-            setAudioPlaying(null);
-            return { ...prev, [index]: 0 };
-          }
-          return { ...prev, [index]: current + 0.02 };
-        });
-      }, 100);
+      audio.play().catch((err) => {
+        console.error("Audio playback failed:", err);
+      });
     }
   };
 
@@ -503,11 +538,14 @@ function CreateBouquetContent() {
     })();
   };
 
-  // Cleanup interval on unmount
+  // Cleanup audio on unmount
   useEffect(() => {
     setIsMounted(true);
     return () => {
-      if (audioIntervalRef.current) clearInterval(audioIntervalRef.current);
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
     };
   }, []);
 
@@ -749,7 +787,7 @@ function CreateBouquetContent() {
                 <p className="text-gray-500">A collection of favorite moments.</p>
               </motion.div>
 
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-5 max-w-4xl w-full">
+              <div className="flex flex-wrap justify-center gap-5 max-w-4xl w-full">
                 {PHOTOS.map((photo, i) => (
                   <motion.div
                     key={i}
@@ -760,7 +798,7 @@ function CreateBouquetContent() {
                     whileHover={{ scale: 1.03 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => setLightboxPhoto(i)}
-                    className="relative aspect-[4/5] bg-gray-100 rounded-2xl overflow-hidden border border-pink-100 shadow-md cursor-pointer group"
+                    className="relative w-[calc(50%-10px)] md:w-[calc(25%-15px)] aspect-[4/5] bg-gray-100 rounded-2xl overflow-hidden border border-pink-100 shadow-md cursor-pointer group"
                   >
                     <img 
                       src={photo.url} 

@@ -71,10 +71,11 @@ export const DEFAULT_BOUQUET: BouquetData = {
     { id: "5", title: "Laughter", message: "No one makes me laugh quite like you do. Here's to a lifetime of shared giggles and jokes.", x: 22, y: 65, color: "bg-pink-300" },
   ],
   photos: [
-    { id: 1, url: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=600&auto=format&fit=crop", caption: "Our first trip together ✈️" },
-    { id: 2, url: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=600&auto=format&fit=crop", caption: "That time we laughed until we cried 😂" },
-    { id: 3, url: "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?q=80&w=600&auto=format&fit=crop", caption: "Coffee dates are the best dates ☕" },
-    { id: 4, url: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=600&auto=format&fit=crop", caption: "Forever my favorite person ❤️" },
+    { id: 1, url: "/WhatsApp%20Image%202026-06-25%20at%2012.09.21%20PM.jpeg", caption: "My absolute favorite memory ❤️" },
+    { id: 2, url: "/photo1.jpeg", caption: "Our first maryathak illa photo 😛" },
+    { id: 3, url: "/photo2.jpeg", caption: "My fav photo of us 🥹" },
+    { id: 4, url: "/photo3jpeg.jpeg", caption: "The first time we drank tg🙂‍↔️" },
+    { id: 5, url: "/photo4.jpeg", caption: "Forever my favorite person ❤️" },
   ],
   videos: [
     { id: 1, title: "Our Anniversary Trip", duration: "0:45", thumbnail: "https://images.unsplash.com/photo-1530103862676-de889fa09f43?q=80&w=400&auto=format&fit=crop" },
@@ -85,7 +86,13 @@ export const DEFAULT_BOUQUET: BouquetData = {
     { id: 2, date: "August 2023", title: "First Date", description: "Nervous laughter and endless conversation over coffee.", image: "https://images.unsplash.com/photo-1445116572660-236099ec97a0?q=80&w=300&auto=format&fit=crop" },
     { id: 3, date: "December 2023", title: "First Holidays Together", description: "Cozy nights, hot chocolate, and my favorite winter memory.", image: "https://images.unsplash.com/photo-1512474932049-782f6b38f1ba?q=80&w=300&auto=format&fit=crop" },
   ],
-  audioClips: [],
+  audioClips: [
+    {
+      id: 1,
+      title: "Voice Note",
+      url: "/WhatsApp%20Audio%202026-06-25%20at%2012.03.27%20AM.ogg"
+    }
+  ],
 };
 
 const BouquetContext = createContext<BouquetData | undefined>(undefined);
